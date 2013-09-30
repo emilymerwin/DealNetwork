@@ -6,3 +6,5 @@ data/network.json
 data/connectsionsAsChildren.json
 
 py/ConnectionsAsChildren_CSVtoJSON.py
+
+versions/
