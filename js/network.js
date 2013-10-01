@@ -58,7 +58,7 @@ d3.json("data/network.json", function(error, graph) {
 	    .call(force.drag);
 
 	var text = svg.append("svg:g").selectAll("g")
-	    .data(force.nodes())
+	    .data(force.nodes().filter(function(d) {return d.weight >=3;}))
 	  .enter().append("svg:g");
 
 	// A copy of the text with a thick white stroke for legibility.
