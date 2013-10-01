@@ -23,6 +23,14 @@ d3.json("data/network.json", function(error, graph) {
 	    .attr("width", w)
 	    .attr("height", h);
 
+	var drag = force.drag()
+		.on("dragstart", dragstart);
+		
+	function dragstart(d) {
+		d.fixed = true;
+		d3.select(this).classed("fixed", true);
+	}
+	
 	// Per-type markers, as they don't inherit styles.
 	svg.append("svg:defs").selectAll("marker")
 	    .data(["suit", "licensing", "resolved"])
