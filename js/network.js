@@ -7,8 +7,9 @@ d3.json("data/network.json", function(error, graph) {
 		.start();*/
 	//	links = graph
 	var w = 960,
-	    h = 960;
-
+	    h = 960,
+		r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+	
 	var force = d3.layout.force()
 	    .nodes(graph.nodes)
 	    .links(graph.links)
@@ -45,7 +46,7 @@ d3.json("data/network.json", function(error, graph) {
 	var circle = svg.append("svg:g").selectAll("circle")
 	    .data(force.nodes())
 	  .enter().append("svg:circle")
-	    .attr("r", 6)
+		.attr("r", function(d) { return r(d.weight) || 5; })
 	    .call(force.drag);
 
 	var text = svg.append("svg:g").selectAll("g")
