@@ -4,16 +4,10 @@ path.link {
   stroke-width: 1.5px;
 }
 
-marker#licensing {
-  fill: green;
 }
 
-path.link.licensing {
-  stroke: green;
 }
 
-path.link.resolved {
-  stroke-dasharray: 0,2 1;
 }
 path.link.employed, path.link.employs, path.link.hired { /*what's the difference between "formerly employed by", "employed by" and "employs"? two of those are probably the same*/
   stroke: green;

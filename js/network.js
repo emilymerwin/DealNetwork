@@ -1,38 +1,29 @@
-var nodes = {};
 d3.json("data/network.json", function(error, graph) {
-/*	force
-		.nodes(graph.nodes)
-		.links(graph.links)
-		.on("tick", tick)
-		.start();*/
-	//	links = graph
-	var w = 960,
-	    h = 960,
-		r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
-	
+	var w = 960, h = 960, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+
 	var force = d3.layout.force()
 	    .nodes(graph.nodes)
 	    .links(graph.links)
 	    .size([w, h])
-	    .linkDistance(60)
+	    .linkDistance(30)
 	    .charge(-300)
 	    .on("tick", tick)
 	    .start();
 
-	var svg = d3.select("body").append("svg:svg")
+	var svg = d3.select("#network").append("svg:svg")
 	    .attr("width", w)
 	    .attr("height", h);
 
 	var drag = force.drag()
 		.on("dragstart", dragstart);
-		
+
 	function dragstart(d) {
 		d.fixed = true;
 		d3.select(this).classed("fixed", true);
 	}
 
 	// build the arrow.
-	svg.append("svg:defs").selectAll("marker")
+	/*svg.append("svg:defs").selectAll("marker")
 	    .data(["end"])      // Different link/path types can be defined here
 	  .enter().append("svg:marker")    // This section adds in the arrows
 	    .attr("id", String)
@@ -43,14 +34,13 @@ d3.json("data/network.json", function(error, graph) {
 	    .attr("markerHeight", 6)
 	    .attr("orient", "auto")
 	  .append("svg:path")
-	    .attr("d", "M0,-5L10,0L0,5");
+	    .attr("d", "M0,-5L10,0L0,5");*/
 
 	var path = svg.append("svg:g").selectAll("path")
 	    .data(force.links())
 	  .enter().append("svg:path")
 	    .attr("class", function(d) { return "link " + d.connection; })
-	    //.attr("marker-end", function(d) { return "url(#" + d.connection + ")"; });
-		.attr("marker-end", "url(#end)");
+		//.attr("marker-end", "url(#end)");
 
 	var circle = svg.append("svg:g").selectAll("circle")
 	    .data(force.nodes())
@@ -58,6 +48,7 @@ d3.json("data/network.json", function(error, graph) {
 		.attr("r", function(d) { return r(d.weight) || 5; })
 		.on("mouseover", mouseover)
 	    .on("mouseout", mouseout)
+		//.style("fill", function(d) { return color(d.group); })
 	    .call(force.drag);
 
 	var text = svg.append("svg:g").selectAll("g")
@@ -79,10 +70,10 @@ d3.json("data/network.json", function(error, graph) {
 	// Use elliptical arc path segments to doubly-encode directionality.
 	function tick() {
 	  path.attr("d", function(d) {
-	    var dx = d.target.x - d.source.x,
+	    /*var dx = d.target.x - d.source.x,
 	        dy = d.target.y - d.source.y,
-	        //dr = Math.sqrt(dx * dx + dy * dy); //this is for curved lines
-			dr = 0;
+	        dr = Math.sqrt(dx * dx + dy * dy); //this is for curved lines*/
+		dr = 0;
 	    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
 	  });
 
@@ -117,9 +108,4 @@ d3.json("data/network.json", function(error, graph) {
 			return tip;
 		}
 	});
-})
-// Compute the distinct nodes from the links.
-/*links.forEach(function(link) {
-  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
-});*/
+});

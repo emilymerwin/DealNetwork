@@ -8,3 +8,11 @@ data/connectsionsAsChildren.json
 py/ConnectionsAsChildren_CSVtoJSON.py
 
 versions/
+
+data/FindReplace.txt
+
+data/strigify2.json
+
+data/testJSON.json
+
+js/curveattempt.js
