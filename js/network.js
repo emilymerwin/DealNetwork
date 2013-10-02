@@ -1,4 +1,4 @@
-d3.json("data/network.json", function(error, graph) {
+d3.json("data/strigify2.json", function(error, graph) {
 	var w = 960, h = 960, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 
 	var force = d3.layout.force()
