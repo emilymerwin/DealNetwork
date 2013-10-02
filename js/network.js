@@ -55,6 +55,8 @@ d3.json("data/network.json", function(error, graph) {
 	    .data(force.nodes())
 	  .enter().append("svg:circle")
 		.attr("r", function(d) { return r(d.weight) || 5; })
+		.on("mouseover", mouseover)
+	    .on("mouseout", mouseout)
 	    .call(force.drag);
 
 	var text = svg.append("svg:g").selectAll("g")
@@ -91,6 +93,29 @@ d3.json("data/network.json", function(error, graph) {
 	    return "translate(" + d.x + "," + d.y + ")";
 	  });
 	}
+	
+	function mouseover() {
+		d3.select(this).transition()
+			.duration(5)
+			.style("fill", "#636363");
+	}
+
+	function mouseout() {
+		d3.select(this).transition()
+			.duration(750)
+			.style("fill", "#CCCCCC");
+	}
+
+	$(document).tooltip({
+		items: $("circle"),
+		position: { my: "right+15 bottom" },
+		content: function(){
+			var data = this.__data__; //this is not the right way to access the data, fix it
+			var tip = data.name; //this is the only data currently stored on the circle object - we need access to the links and notes as well
+			this.tip = tip;//store it so we don't have to parse all that again
+			return tip;
+		}
+	});
 })
 // Compute the distinct nodes from the links.
 /*links.forEach(function(link) {
