@@ -30,15 +30,15 @@ d3.json("data/network.json", function(error, graph) {
 		d.fixed = true;
 		d3.select(this).classed("fixed", true);
 	}
-	
-	// Per-type markers, as they don't inherit styles.
+
+	// build the arrow.
 	svg.append("svg:defs").selectAll("marker")
-	    .data(["suit", "licensing", "resolved"])
-	  .enter().append("svg:marker")
+	    .data(["end"])      // Different link/path types can be defined here
+	  .enter().append("svg:marker")    // This section adds in the arrows
 	    .attr("id", String)
 	    .attr("viewBox", "0 -5 10 10")
 	    .attr("refX", 15)
-	    .attr("refY", -1.5)
+	    //.attr("refY", -1.5) //only need this is if you have curved lines
 	    .attr("markerWidth", 6)
 	    .attr("markerHeight", 6)
 	    .attr("orient", "auto")
@@ -49,7 +49,8 @@ d3.json("data/network.json", function(error, graph) {
 	    .data(force.links())
 	  .enter().append("svg:path")
 	    .attr("class", function(d) { return "link " + d.connection; })
-	    .attr("marker-end", function(d) { return "url(#" + d.connection + ")"; });
+	    //.attr("marker-end", function(d) { return "url(#" + d.connection + ")"; });
+		.attr("marker-end", "url(#end)");
 
 	var circle = svg.append("svg:g").selectAll("circle")
 	    .data(force.nodes())
