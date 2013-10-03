@@ -144,5 +144,5 @@ function printNewJSON(json){
 		newLinks.push({"notes": link.notes, "source": link.source.index, "connection": link.connection, "target": link.target.index});
 	}
 	var newJson = {"nodes": newNodes, "links": newLinks};
-	$("#out").append(JSON.stringify(newJson));
+	$("#out").html(JSON.stringify(newJson));
 }
