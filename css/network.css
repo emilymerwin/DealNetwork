@@ -1,3 +1,19 @@
+#legend .swatch{
+	margin:10px;
+	float:left;
+}
+#legend .swatch.appointed{
+	border-bottom: 2px solid #31a354;
+}
+#legend .swatch.complaints{
+	border-bottom: 2px solid #d6616b;
+}
+#legend .swatch.employs{
+	border-bottom: 2px solid #3182bd;
+}
+#legend .swatch.complaints.against{
+	border-bottom: 2px dashed #666666;
+}
 path.link {
   fill: none;
   stroke: #666;
@@ -19,11 +35,6 @@ path.link.complaints.with, path.link.complaint.with { /*we have "filed complaint
 path.link.complaints.against, path.link.fired, path.link.subpoenaed {
 	stroke-dasharray: 0,2 1;
 }
-
-path.link.subpoened {
-  stroke: #fd8d3c;
-}
-
 circle {
   fill: #ccc;
   stroke: #FFF;
