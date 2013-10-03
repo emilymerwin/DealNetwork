@@ -1,7 +1,5 @@
 d3.json("data/network.json", function(error, graph) {
-
 	var w = 960, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
-
 	var force = d3.layout.force()
 	    .nodes(graph.nodes)
 	    .links(graph.links)
@@ -71,8 +69,10 @@ d3.json("data/network.json", function(error, graph) {
 	    .call(force.drag);
 
 	var text = svg.append("svg:g").selectAll("g")
-	    .data(force.nodes().filter(function(d) {return d.weight >=3;}))
-	  .enter().append("svg:g");
+	    //.data(force.nodes().filter(function(d) {return d.weight >=3;}))
+		.data(force.nodes())
+	  .enter().append("svg:g")
+		.classed("small", function(d){ return d.weight<3; });
 
 	// A copy of the text with a thick white stroke for legibility.
 	text.append("svg:text")

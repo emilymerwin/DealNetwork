@@ -29,6 +29,12 @@ body{
 .edit .fixed{
 	stroke: red;
 }
+.small{
+	display:none;
+}
+.edit .small {
+	display:inline;
+}
 path.link {
   fill: none;
   stroke: #666;
