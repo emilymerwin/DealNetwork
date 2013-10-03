@@ -40,3 +40,6 @@ text.shadow {
   stroke-width: 3px;
   stroke-opacity: .8;
 }
+.ui-tooltip-content{
+	font-size:12px;
+}

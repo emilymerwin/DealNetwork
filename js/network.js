@@ -102,7 +102,7 @@ d3.json("data/strigify2.json", function(error, graph) {
 		items: $("circle"),
 		position: { my: "right+15 bottom" },
 		content: function(){
-			var data = this.__data__; //this is not the right way to access the data, fix it
+			var data = d3.select(this).datum();
 			var tip = data.name; //this is the only data currently stored on the circle object - we need access to the links and notes as well
 			this.tip = tip;//store it so we don't have to parse all that again
 			return tip;
