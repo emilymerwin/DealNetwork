@@ -1,5 +1,6 @@
-d3.json("data/strigify2.json", function(error, graph) {
-	var w = 960, h = 960, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+d3.json("data/network.json", function(error, graph) {
+
+	var w = 960, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 
 	var force = d3.layout.force()
 	    .nodes(graph.nodes)
@@ -21,6 +22,21 @@ d3.json("data/strigify2.json", function(error, graph) {
 		d.fixed = true;
 		d3.select(this).classed("fixed", true);
 	}
+
+	$("#edit")
+		.prop("checked", false)
+		.button() //initialize for jQuery UI
+		.click(function(){
+			$("#network").toggleClass("edit");
+			$("#editor").toggle();
+		});
+
+	$("#layout")
+		.button()
+		.click(function(){
+			$("#out").show(); 
+			printNewJSON(graph)
+		});
 
 	// build the arrow.
 	/*svg.append("svg:defs").selectAll("marker")
@@ -115,4 +131,17 @@ d3.json("data/strigify2.json", function(error, graph) {
 			return tip;
 		}
 	});
-});
+});//d3.json
+function printNewJSON(json){
+	var newNodes = [], newLinks = [];
+	for (var i=0; i<json.nodes.length; i++){
+		var node = json.nodes[i];
+		newNodes.push({"name": node.name,"index": node.index, "weight": node.weight, "x": node.x, "y": node.y, "fixed": node.fixed});
+	}
+	for(var i=0; i<json.links.length; i++){
+		var link = json.links[i];
+		newLinks.push({"notes": link.notes, "source": link.source.index, "connection": link.connection, "target": link.target.index});
+	}
+	var newJson = {"nodes": newNodes, "links": newLinks};
+	$("#out").append(JSON.stringify(newJson));
+}
