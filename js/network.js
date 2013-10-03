@@ -46,8 +46,10 @@ d3.json("data/strigify2.json", function(error, graph) {
 	    .data(force.nodes())
 	  .enter().append("svg:circle")
 		.attr("r", function(d) { return r(d.weight) || 5; })
+		.classed("fixed", function(d){return d.fixed})
 		.on("mouseover", mouseover)
 	    .on("mouseout", mouseout)
+		.on("dblclick", dblclick)
 		//.style("fill", function(d) { return color(d.group); })
 	    .call(force.drag);
 
@@ -96,6 +98,11 @@ d3.json("data/strigify2.json", function(error, graph) {
 		d3.select(this).transition()
 			.duration(750)
 			.style("fill", "#CCCCCC");
+	}
+	function dblclick(){
+		d3.select(this)
+			.classed("fixed", false)
+			.datum().fixed = false
 	}
 
 	$(document).tooltip({

@@ -14,6 +14,9 @@
 #legend .swatch.complaints.against{
 	border-bottom: 2px dashed #666666;
 }
+.fixed{
+	stroke: red;
+}
 path.link {
   fill: none;
   stroke: #666;
