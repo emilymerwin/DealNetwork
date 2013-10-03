@@ -23,6 +23,7 @@ d3.json("data/network.json", function(error, graph) {
 		d3.select(this).classed("fixed", true);
 	}
 
+	$("#tools").tooltip();
 	$("#edit")
 		.prop("checked", false)
 		.button() //initialize for jQuery UI
@@ -121,7 +122,7 @@ d3.json("data/network.json", function(error, graph) {
 			.datum().fixed = false
 	}
 
-	$(document).tooltip({
+	$("#network").tooltip({
 		items: $("circle"),
 		position: { my: "right+15 bottom" },
 		content: function(){
