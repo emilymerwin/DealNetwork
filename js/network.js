@@ -124,12 +124,24 @@ d3.json("data/network.json", function(error, graph) {
 
 	$("#network").tooltip({
 		items: $("circle"),
-		position: { my: "right+15 bottom" },
+		position: { my: "right-25 bottom" },
 		content: function(){
-			var data = d3.select(this).datum();
-			var tip = data.name; //this is the only data currently stored on the circle object - we need access to the links and notes as well
-			this.tip = tip;//store it so we don't have to parse all that again
-			return tip;
+			if(!this.tip){
+				var data = d3.select(this).datum();
+				var tip = data.name+"<ul>";
+				for(var i= 0; i<graph.links.length; i++){
+					var thisLink = graph.links[i];
+					if(thisLink.source.index === data.index){
+						tip += "<li>"+thisLink.connection+" "+thisLink.target.name+"</li>";
+					}
+					if(thisLink.target.index === data.index){
+						tip += "<li>"+thisLink.source.name+" is/was "+thisLink.connection+"</li>";
+					}
+				}
+				tip += "</ul>"
+				this.tip = tip;//store it so we don't have to parse all that again
+			}
+			return this.tip;
 		}
 	});
 });//d3.json
