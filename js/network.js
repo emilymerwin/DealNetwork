@@ -137,7 +137,7 @@ function printNewJSON(json){
 	var newNodes = [], newLinks = [];
 	for (var i=0; i<json.nodes.length; i++){
 		var node = json.nodes[i];
-		newNodes.push({"name": node.name,"index": node.index, "weight": node.weight, "x": node.x, "y": node.y, "fixed": node.fixed});
+		newNodes.push({"name": node.name, "x": node.x, "y": node.y, "fixed": node.fixed});
 	}
 	for(var i=0; i<json.links.length; i++){
 		var link = json.links[i];
