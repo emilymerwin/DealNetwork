@@ -1,11 +1,11 @@
 d3.json("data/network.json", function(error, graph) {
-	var w = 960, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+	var w = 700, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 	var force = d3.layout.force()
 	    .nodes(graph.nodes)
 	    .links(graph.links)
 	    .size([w, h])
-	    .linkDistance(30)
-	    .charge(-300)
+	    .linkDistance(20)
+	    .charge(-200)
 	    .on("tick", tick)
 	    .start();
 
