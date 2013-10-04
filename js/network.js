@@ -1,3 +1,4 @@
+(function () {
 d3.json("data/network.json", function(error, graph) {
 	var w = 700, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 	var force = d3.layout.force()
@@ -34,7 +35,7 @@ d3.json("data/network.json", function(error, graph) {
 		.button()
 		.click(function(){
 			$("#out").show(); 
-			printNewJSON(graph)
+			printNewJSON(graph);
 		});
 
 	// build the arrow.
@@ -54,14 +55,14 @@ d3.json("data/network.json", function(error, graph) {
 	var path = svg.append("svg:g").selectAll("path")
 	    .data(force.links())
 	  .enter().append("svg:path")
-	    .attr("class", function(d) { return "link " + d.connection; })
+	    .attr("class", function(d) { return "link " + d.connection; });
 		//.attr("marker-end", "url(#end)");
 
 	var circle = svg.append("svg:g").selectAll("circle")
 	    .data(force.nodes())
 	  .enter().append("svg:circle")
 		.attr("r", function(d) { return r(d.weight) || 5; })
-		.classed("fixed", function(d){return d.fixed})
+		.classed("fixed", function(d){ return d.fixed; })
 		.on("mouseover", mouseover)
 	    .on("mouseout", mouseout)
 		.on("dblclick", dblclick)
@@ -104,22 +105,23 @@ d3.json("data/network.json", function(error, graph) {
 	    return "translate(" + d.x + "," + d.y + ")";
 	  });
 	}
-	
+
 	function mouseover() {
 		d3.select(this).transition()
 			.duration(5)
 			.style("fill", "#636363");
-	}
+	}//mouseover
 
 	function mouseout() {
 		d3.select(this).transition()
 			.duration(750)
 			.style("fill", "#CCCCCC");
 	}
+
 	function dblclick(){
 		d3.select(this)
 			.classed("fixed", false)
-			.datum().fixed = false
+			.datum().fixed = false;
 	}
 
 	$("#network").tooltip({
@@ -129,7 +131,7 @@ d3.json("data/network.json", function(error, graph) {
 			if(!this.tip){
 				var data = d3.select(this).datum();
 				var tip = data.name+"<ul>";
-				for(var i= 0; i<graph.links.length; i++){
+				for(var i=0; i<graph.links.length; i++){
 					var thisLink = graph.links[i];
 					if(thisLink.source.index === data.index){
 						tip += "<li>"+thisLink.connection+" "+thisLink.target.name+"</li>";
@@ -138,7 +140,7 @@ d3.json("data/network.json", function(error, graph) {
 						tip += "<li>"+thisLink.source.name+" is/was "+thisLink.connection+"</li>";
 					}
 				}
-				tip += "</ul>"
+				tip += "</ul>";
 				this.tip = tip;//store it so we don't have to parse all that again
 			}
 			return this.tip;
@@ -158,3 +160,4 @@ function printNewJSON(json){
 	var newJson = {"nodes": newNodes, "links": newLinks};
 	$("#out").html(JSON.stringify(newJson));
 }
+}());//initialize
