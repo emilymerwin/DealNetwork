@@ -10,5 +10,5 @@
 - [X] Tooltips only display names, because that is the only info attached to the circle DOM. Need to attach the other info so we can display it.
 - [ ] Add edit-mode option to release all fixed elements
 - [ ] Display directional arrows? Had an issue with this because of the node scaling by weight
-- [ ] jQuery, jQuery UI and jQuery UI css are being used for the tooltips and the edit mode buttons - might want to either create own or download a custom package to reduce unnecessary load
+- [ ] don't really need jQuery, get rid of it
 

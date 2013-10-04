@@ -22,17 +22,16 @@ d3.json("data/network.json", function(error, graph) {
 		d3.select(this).classed("fixed", true);
 	}
 
-	$("#tools").tooltip();
+	var tooltip = d3.select("#tooltip");
+	
 	$("#edit")
 		.prop("checked", false)
-		.button() //initialize for jQuery UI
 		.click(function(){
 			$("#network").toggleClass("edit");
 			$("#editor").toggle();
 		});
 
 	$("#layout")
-		.button()
 		.click(function(){
 			$("#out").show(); 
 			printNewJSON(graph);
@@ -107,7 +106,34 @@ d3.json("data/network.json", function(error, graph) {
 	}
 
 	function mouseover() {
-		d3.select(this).transition()
+		var me = d3.select(this);
+
+		if(!me.tip){
+			var data = me.datum();
+
+			var tip = data.name+"<ul>";
+			for(var i=0; i<graph.links.length; i++){
+				var thisLink = graph.links[i];
+				if(thisLink.source.index === data.index){
+					tip += "<li>"+thisLink.connection+" "+thisLink.target.name+"</li>";
+				}
+				if(thisLink.target.index === data.index){
+					tip += "<li>"+thisLink.source.name+" is/was "+thisLink.connection+"</li>";
+				}
+			}
+			tip += "</ul>";
+
+			me.tip = tip; //store it so we don't have to parse all that again
+			me.xPosition = data.px+40;
+		    me.yPosition = data.py-20;
+		}
+        tooltip
+            .style("left", me.xPosition+"px")
+            .style("top", me.yPosition+"px")
+			.style("visibility", "visible")
+            .html(me.tip);
+
+		me.transition()
 			.duration(5)
 			.style("fill", "#636363");
 	}//mouseover
@@ -116,6 +142,8 @@ d3.json("data/network.json", function(error, graph) {
 		d3.select(this).transition()
 			.duration(750)
 			.style("fill", "#CCCCCC");
+
+		tooltip.style("visibility", "hidden");
 	}
 
 	function dblclick(){
@@ -123,29 +151,6 @@ d3.json("data/network.json", function(error, graph) {
 			.classed("fixed", false)
 			.datum().fixed = false;
 	}
-
-	$("#network").tooltip({
-		items: $("circle"),
-		position: { my: "right-25 bottom" },
-		content: function(){
-			if(!this.tip){
-				var data = d3.select(this).datum();
-				var tip = data.name+"<ul>";
-				for(var i=0; i<graph.links.length; i++){
-					var thisLink = graph.links[i];
-					if(thisLink.source.index === data.index){
-						tip += "<li>"+thisLink.connection+" "+thisLink.target.name+"</li>";
-					}
-					if(thisLink.target.index === data.index){
-						tip += "<li>"+thisLink.source.name+" is/was "+thisLink.connection+"</li>";
-					}
-				}
-				tip += "</ul>";
-				this.tip = tip;//store it so we don't have to parse all that again
-			}
-			return this.tip;
-		}
-	});
 });//d3.json
 function printNewJSON(json){
 	var newNodes = [], newLinks = [];
