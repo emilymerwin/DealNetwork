@@ -77,7 +77,23 @@ d3.json("data/network.json", function(error, graph) {
 	var path = svg.append("svg:g").selectAll("path")
 	    .data(force.links())
 	  .enter().append("svg:path")
-	    .attr("class", function(d) { return "link " + d.connection; });
+	    .attr("class", function(d) { return "link " + d.connection; })
+		.on("mouseover", function(d){ 
+			if(d.notes){
+				d3.select(this).style("stroke-width", "3px")
+				tooltip
+		            .style("left", d3.event.pageX+"px")
+		            .style("top", d3.event.pageY+"px")
+					.style("display", "block")
+		            .html(d.notes);
+			}
+		})
+		.on("mouseout", function(d){
+			if(d.notes){
+				d3.select(this).style("stroke-width", "1.5px"); 
+				tooltip.style("display", "none");
+			}
+		});
 		//.attr("marker-end", "url(#end)");
 
 	var circle = svg.append("svg:g").selectAll("circle")
