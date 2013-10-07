@@ -17,7 +17,7 @@ for i, row in enumerate(reader):
 	if node not in keyArr:
 		keyArr.append(node)
 		num = len(keyArr)-1
-		nodeArr.append({"name": row['Name']})
+		nodeArr.append({"name": row['Name'], "title": row['Title']})
 
 	else:
 		num = keyArr.index(node)
@@ -27,13 +27,13 @@ for i, row in enumerate(reader):
 	if node2 not in keyArr:
 		keyArr.append(node2)
 		num2 = len(keyArr)-1
-		nodeArr.append({"name": row['Name or organization']})
+		nodeArr.append({"name": row['Name or organization'], "title": row['Title2']})
 
 	else:
 		num2 = keyArr.index(node2)
 
 	#add link between node and node2
-	linkArr.append({"source": num, "target": num2, "connection": row['Link'], "notes": row['Notes']})
+	linkArr.append({"source": num, "target": num2, "connection": row['Link'], "notes": row['Description']})
 
 tree = {"nodes": nodeArr, "links": linkArr}
 out = json.dumps(tree, indent=4)

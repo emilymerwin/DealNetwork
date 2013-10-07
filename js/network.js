@@ -134,7 +134,7 @@ d3.json("data/network.json", function(error, graph) {
 		if(!me.tip){
 			var data = me.datum();
 
-			var tip = data.name+"<ul>";
+			var tip = data.name+" <span class='title'>"+data.title+"</span><ul>";
 			for(var i=0; i<graph.links.length; i++){
 				var thisLink = graph.links[i];
 				if(thisLink.source.index === data.index){
@@ -179,7 +179,7 @@ function printNewJSON(json){
 	var newNodes = [], newLinks = [];
 	for (var i=0; i<json.nodes.length; i++){
 		var node = json.nodes[i];
-		newNodes.push({"name": node.name, "x": node.x, "y": node.y, "fixed": node.fixed});
+		newNodes.push({"name": node.name, "title": node.title, "x": node.x, "y": node.y, "fixed": node.fixed});
 	}
 	for(var i=0; i<json.links.length; i++){
 		var link = json.links[i];
