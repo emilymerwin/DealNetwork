@@ -8,7 +8,7 @@
 
 ###TODO
 - [X] Tooltips only display names, because that is the only info attached to the circle DOM. Need to attach the other info so we can display it.
-- [ ] Add edit-mode option to release all fixed elements
+- [X] Add edit-mode option to release all fixed elements
 - [ ] Display directional arrows? Had an issue with this because of the node scaling by weight
 - [X] don't really need jQuery, get rid of it
 

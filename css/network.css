@@ -48,6 +48,7 @@
 }
 .edit .fixed{
 	stroke: red;
+	stroke-width: .5px;
 }
 .small{
 	display:none;

@@ -53,6 +53,13 @@ d3.json("data/network.json", function(error, graph) {
 			printNewJSON(graph);
 		});
 
+	d3.select("#unfix")
+		.on("click", function(){
+			force.stop();
+			d3.selectAll(".fixed")
+				.classed("fixed", false)
+				.data(this.data, function(d){ d.fixed = 0; return d; });
+		});
 	// build the arrow.
 	/*svg.append("svg:defs").selectAll("marker")
 	    .data(["end"])      // Different link/path types can be defined here
