@@ -24,6 +24,23 @@ d3.json("data/network.json", function(error, graph) {
 
 	var tooltip = d3.select("#tooltip");
 	
+	//add tooltips to the editor buttons
+	d3.selectAll(".btn")
+		.on("mouseover", function(){
+			if(!this.data){ //prevent browser default tooltips
+				this.data = this.title;
+				this.title = "";
+			}
+			tooltip
+	            .style("left", d3.event.pageX+"px")
+	            .style("top", d3.event.pageY+25+"px")
+				.style("visibility", "visible")
+	            .html(this.data);
+		})
+		.on("mouseout", function(event){
+			tooltip.style("visibility", "hidden");
+		});
+
 	$("#edit")
 		.prop("checked", false)
 		.click(function(){
