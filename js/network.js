@@ -30,12 +30,10 @@ d3.json("data/network.json", function(error, graph) {
 			if(!this.data){ //prevent browser default tooltips
 				this.data = this.title;
 				this.title = "";
+				this.xPosition = d3.event.pageX;
+				this.yPosition = d3.event.pageY+25;
 			}
-			tooltip
-	            .style("left", d3.event.pageX+"px")
-	            .style("top", d3.event.pageY+25+"px")
-				.style("display", "block")
-	            .html(this.data);
+			placeTip(this.xPosition, this.yPosition, this.data);
 		})
 		.on("mouseout", function(event){
 			tooltip.style("display", "none");
@@ -87,11 +85,11 @@ d3.json("data/network.json", function(error, graph) {
 	d3.selectAll(".notes")
 		.on("mouseover", function(d){
 			d3.select(this).style("stroke-width", "3px")
-			tooltip
-	            .style("left", d3.event.pageX+"px")
-	            .style("top", d3.event.pageY+"px")
-				.style("display", "block")
-	            .html(d.notes);
+			if(!d.xPosition){
+				d.xPosition = d3.event.pageX;
+				d.yPosition = d3.event.pageY;
+			}
+			placeTip(d.xPosition, d.yPosition, d.notes);
 		})
 		.on("mouseout", function(d){
 			d3.select(this).style("stroke-width", "1.5px"); 
@@ -168,12 +166,8 @@ d3.json("data/network.json", function(error, graph) {
 			me.xPosition = data.px+40;
 		    me.yPosition = data.py-20;
 		}
-        tooltip
-            .style("left", me.xPosition+"px")
-            .style("top", me.yPosition+"px")
-			.style("display", "block")
-            .html(me.tip);
-
+		placeTip(me.xPosition, me.yPosition, me.tip);
+		
 		me.transition()
 			.duration(5)
 			.style("fill", "#636363");
@@ -191,6 +185,14 @@ d3.json("data/network.json", function(error, graph) {
 		d3.select(this)
 			.classed("fixed", false)
 			.datum().fixed = false;
+	}
+
+	function placeTip(x, y, html){
+		tooltip
+            .style("left", x+"px")
+            .style("top", y+"px")
+			.style("display", "block")
+            .html(html);
 	}
 });//d3.json
 function printNewJSON(json){
