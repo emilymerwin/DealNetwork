@@ -15,7 +15,7 @@ body{
 	pointer-events: none; /*this prevents triggering mouseout if tip gets in way of cursor*/
 	max-width:300px;
 	z-index:9999;
-	visibility:hidden;
+	display:none;
 	line-height:17px;
 }
 #legend .swatch{

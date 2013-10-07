@@ -34,11 +34,11 @@ d3.json("data/network.json", function(error, graph) {
 			tooltip
 	            .style("left", d3.event.pageX+"px")
 	            .style("top", d3.event.pageY+25+"px")
-				.style("visibility", "visible")
+				.style("display", "block")
 	            .html(this.data);
 		})
 		.on("mouseout", function(event){
-			tooltip.style("visibility", "hidden");
+			tooltip.style("display", "none");
 		});
 
 	$("#edit")
@@ -147,7 +147,7 @@ d3.json("data/network.json", function(error, graph) {
         tooltip
             .style("left", me.xPosition+"px")
             .style("top", me.yPosition+"px")
-			.style("visibility", "visible")
+			.style("display", "block")
             .html(me.tip);
 
 		me.transition()
@@ -160,7 +160,7 @@ d3.json("data/network.json", function(error, graph) {
 			.duration(750)
 			.style("fill", "#CCCCCC");
 
-		tooltip.style("visibility", "hidden");
+		tooltip.style("display", "none");
 	}
 
 	function dblclick(){
