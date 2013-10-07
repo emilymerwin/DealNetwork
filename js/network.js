@@ -41,16 +41,15 @@ d3.json("data/network.json", function(error, graph) {
 			tooltip.style("display", "none");
 		});
 
-	$("#edit")
-		.prop("checked", false)
-		.click(function(){
-			$("#network").toggleClass("edit");
-			$("#editor").toggle();
+	d3.select("#edit")
+		.property("checked", false)
+		.on("click", function(){
+			document.getElementById("container").classList.toggle("edit");
 		});
 
-	$("#layout")
-		.click(function(){
-			$("#out").show(); 
+	d3.select("#layout")
+		.on("click", function(){
+			document.getElementById("out").style.display = "block"; 
 			printNewJSON(graph);
 		});
 
@@ -180,6 +179,6 @@ function printNewJSON(json){
 		newLinks.push({"notes": link.notes, "source": link.source.index, "connection": link.connection, "target": link.target.index});
 	}
 	var newJson = {"nodes": newNodes, "links": newLinks};
-	$("#out").html(JSON.stringify(newJson));
+	document.getElementById("out").innerHTML = JSON.stringify(newJson);
 }
 }());//initialize

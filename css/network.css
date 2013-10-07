@@ -43,6 +43,9 @@
 #editor{
 	display:none;
 }
+.edit #editor{
+	display:block;
+}
 .edit .fixed{
 	stroke: red;
 }
