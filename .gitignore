@@ -16,3 +16,5 @@ data/strigify2.json
 data/testJSON.json
 
 js/curveattempt.js
+
+*.json
