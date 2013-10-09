@@ -72,15 +72,9 @@ d3.json("data/network.json", function(error, graph) {
 		});
 
 	var circle = svg.append("svg:g").selectAll("circle")
-	    .data(force.nodes())
+	    .data(graph.nodes.filter(function(d){ return d.name; }))
 	  .enter().append("svg:circle")
-		.attr("r", function(d){ if(d.name){ return r(d.weight); } return 2; })
-		.attr("class", function(d){
-			if(!d.name){ return "helper"; }
-			else if(d.fixed){ return "node fixed"; }
-			return "node"; //nothing is currently accessing this
-		})
-		//these are being added to the link helpers too, but we won't use those in production so fine for now
+		.attr("r", function(d){ return r(d.weight); })
 		.on("mouseover", mouseover)
 	    .on("mouseout", mouseout)
 		.on("dblclick", dblclick)
