@@ -1,9 +1,32 @@
 (function () {
 d3.json("data/network.json", function(error, graph) {
 	var w = 700, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+
+	if(!graph.bilinks){ //for JSON that wasn't created by this editor
+		//set up for the Bezier curves
+		var nodes = graph.nodes.slice(), links = [], bilinks = [];
+		graph.links.forEach(function(link) {
+		    var s = nodes[link.source],
+		        t = nodes[link.target],
+		        i = {}; // intermediate node
+		    nodes.push(i);
+		    links.push({source: s, target: i}, {source: i, target: t});
+		    bilinks.push([s, i, t]);
+		});
+	}
+	else{
+		var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
+		bilinks.forEach(function(link){
+			for(var i=0; i<link.length; i++){
+				link[i] = nodes[link[i]]; //so link path can stay in sync with node when it moves, I think
+			}
+			links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
+		});
+	}
+
 	var force = d3.layout.force()
-	    .nodes(graph.nodes)
-	    .links(graph.links)
+	    .nodes(nodes)
+	    .links(links)
 	    .size([w, h])
 	    .linkDistance(20)
 	    .charge(-200)
@@ -48,7 +71,7 @@ d3.json("data/network.json", function(error, graph) {
 	d3.select("#layout")
 		.on("click", function(){
 			document.getElementById("out").style.display = "block"; 
-			printNewJSON(graph);
+			printNewJSON(nodes, graph.links, bilinks);
 		});
 
 	d3.select("#unfix")
@@ -73,11 +96,12 @@ d3.json("data/network.json", function(error, graph) {
 	    .attr("d", "M0,-5L10,0L0,5");*/
 
 	var path = svg.append("svg:g").selectAll("path")
-	    .data(force.links())
+	    .data(bilinks)
 	  .enter().append("svg:path")
-	    .attr("class", function(d) {
-			var classes = d.connection;
-			if(d.notes){ classes += " notes"; } //so we can set listeners for only those with data to show
+	    .attr("class", function(d, i) {
+			var link = graph.links[i];
+			var classes = link.connection;
+			if(link.notes){ d.notes = link.notes; classes += " notes"; } //so we can set listeners for only those with data to show
 			return "link " + classes;
 		});
 		//.attr("marker-end", "url(#end)");
@@ -99,8 +123,13 @@ d3.json("data/network.json", function(error, graph) {
 	var circle = svg.append("svg:g").selectAll("circle")
 	    .data(force.nodes())
 	  .enter().append("svg:circle")
-		.attr("r", function(d) { return r(d.weight) || 5; })
-		.classed("fixed", function(d){ return d.fixed; })
+		.attr("r", function(d){ if(d.name){ return r(d.weight); } return 2; })
+		.attr("class", function(d){
+			if(!d.name){ return "helper"; }
+			else if(d.fixed){ return "node fixed"; }
+			return "node"; //nothing is currently accessing this
+		})
+		//these are being added to the link helpers too, but we won't use those in production so fine for now
 		.on("mouseover", mouseover)
 	    .on("mouseout", mouseout)
 		.on("dblclick", dblclick)
@@ -109,7 +138,7 @@ d3.json("data/network.json", function(error, graph) {
 
 	var text = svg.append("svg:g").selectAll("g")
 	    //.data(force.nodes().filter(function(d) {return d.weight >=3;}))
-		.data(force.nodes())
+		.data(graph.nodes)
 	  .enter().append("svg:g")
 		.classed("small", function(d){ return d.weight<3; });
 
@@ -125,14 +154,9 @@ d3.json("data/network.json", function(error, graph) {
 	    .attr("y", ".31em")
 	    .text(function(d) { return d.name; });
 
-	// Use elliptical arc path segments to doubly-encode directionality.
 	function tick() {
 	  path.attr("d", function(d) {
-	    /*var dx = d.target.x - d.source.x,
-	        dy = d.target.y - d.source.y,
-	        dr = Math.sqrt(dx * dx + dy * dy); //this is for curved lines*/
-		dr = 0;
-	    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+	    return "M" + d[0].x + "," + d[0].y + "S" + d[1].x + "," + d[1].y + " " + d[2].x + "," + d[2].y;
 	  });
 
 	  circle.attr("transform", function(d) {
@@ -150,14 +174,16 @@ d3.json("data/network.json", function(error, graph) {
 		if(!me.tip){
 			var data = me.datum();
 
-			var tip = data.name+" <span class='title'>"+data.title+"</span><ul>";
+			var tip = data.name+" <span class='title'>"+graph.nodes[data.index].title+"</span><ul>";
 			for(var i=0; i<graph.links.length; i++){
-				var thisLink = graph.links[i];
-				if(thisLink.source.index === data.index){
-					tip += "<li>"+thisLink.connection+" "+thisLink.target.name+"</li>";
+				var link = graph.links[i]; //use org link arr to evaluate source/target nodes w/o nonsense link between
+				if(link.source.index === data.index){
+					console.log(graph.nodes[link.target.index])
+					
+					tip += "<li>"+link.connection+" "+graph.nodes[link.target.index].name+"</li>";
 				}
-				if(thisLink.target.index === data.index){
-					tip += "<li>"+thisLink.source.name+" is/was "+thisLink.connection+"</li>";
+				if(link.target.index === data.index){
+					tip += "<li>"+graph.nodes[link.source.index].name+" is/was "+link.connection+"</li>";
 				}
 			}
 			tip += "</ul>";
@@ -195,17 +221,21 @@ d3.json("data/network.json", function(error, graph) {
             .html(html);
 	}
 });//d3.json
-function printNewJSON(json){
-	var newNodes = [], newLinks = [];
-	for (var i=0; i<json.nodes.length; i++){
-		var node = json.nodes[i];
+function printNewJSON(nodes, links, bilinks){
+	var newNodes = [], newLinks = [], newBilinks = [];
+	for (var i=0; i<nodes.length; i++){
+		var node = nodes[i];
 		newNodes.push({"name": node.name, "title": node.title, "x": node.x, "y": node.y, "fixed": node.fixed});
 	}
-	for(var i=0; i<json.links.length; i++){
-		var link = json.links[i];
-		newLinks.push({"notes": link.notes, "source": link.source.index, "connection": link.connection, "target": link.target.index});
+	for(var i=0; i<links.length; i++){
+		var link = links[i];
+		newLinks.push({"notes": link.notes, "source": link.source, "connection": link.connection, "target": link.target});
 	}
-	var newJson = {"nodes": newNodes, "links": newLinks};
+	for (var i=0; i<bilinks.length; i++){
+		var bilink = bilinks[i];
+		newBilinks.push([bilink[0].index, bilink[1].index, bilink[2].index]);
+	}
+	var newJson = {"nodes": newNodes, "links": newLinks, "bilinks": newBilinks};
 	document.getElementById("out").innerHTML = JSON.stringify(newJson);
 }
 }());//initialize
