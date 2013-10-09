@@ -2,16 +2,27 @@
 d3.json("data/network.json", function(error, graph) {
 	var w = 700, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 
-	//set up for the Bezier curves
-	var nodes = graph.nodes.slice(), links = [], bilinks = [];
-	graph.links.forEach(function(link) {
-	    var s = nodes[link.source],
-	        t = nodes[link.target],
-	        i = {}; // intermediate node
-	    nodes.push(i);
-	    links.push({source: s, target: i}, {source: i, target: t});
-	    bilinks.push([s, i, t]);
-	});
+	if(!graph.bilinks){ //for JSON that wasn't created by this editor
+		//set up for the Bezier curves
+		var nodes = graph.nodes.slice(), links = [], bilinks = [];
+		graph.links.forEach(function(link) {
+		    var s = nodes[link.source],
+		        t = nodes[link.target],
+		        i = {}; // intermediate node
+		    nodes.push(i);
+		    links.push({source: s, target: i}, {source: i, target: t});
+		    bilinks.push([s, i, t]);
+		});
+	}
+	else{
+		var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
+		bilinks.forEach(function(link){
+			for(var i=0; i<link.length; i++){
+				link[i] = nodes[link[i]]; //so link path can stay in sync with node when it moves, I think
+			}
+			links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
+		});
+	}
 
 	var force = d3.layout.force()
 	    .nodes(nodes)
@@ -60,7 +71,7 @@ d3.json("data/network.json", function(error, graph) {
 	d3.select("#layout")
 		.on("click", function(){
 			document.getElementById("out").style.display = "block"; 
-			printNewJSON(graph);
+			printNewJSON(nodes, graph.links, bilinks);
 		});
 
 	d3.select("#unfix")
@@ -165,12 +176,14 @@ d3.json("data/network.json", function(error, graph) {
 
 			var tip = data.name+" <span class='title'>"+graph.nodes[data.index].title+"</span><ul>";
 			for(var i=0; i<graph.links.length; i++){
-				var link = graph.links[i];
-				if(link.source === data.index){
-					tip += "<li>"+link.connection+" "+graph.nodes[link.target].name+"</li>";
+				var link = graph.links[i]; //use org link arr to evaluate source/target nodes w/o nonsense link between
+				if(link.source.index === data.index){
+					console.log(graph.nodes[link.target.index])
+					
+					tip += "<li>"+link.connection+" "+graph.nodes[link.target.index].name+"</li>";
 				}
-				if(link.target === data.index){
-					tip += "<li>"+graph.nodes[link.source].name+" is/was "+link.connection+"</li>";
+				if(link.target.index === data.index){
+					tip += "<li>"+graph.nodes[link.source.index].name+" is/was "+link.connection+"</li>";
 				}
 			}
 			tip += "</ul>";
@@ -208,17 +221,21 @@ d3.json("data/network.json", function(error, graph) {
             .html(html);
 	}
 });//d3.json
-function printNewJSON(json){
-	var newNodes = [], newLinks = [];
-	for (var i=0; i<json.nodes.length; i++){
-		var node = json.nodes[i];
+function printNewJSON(nodes, links, bilinks){
+	var newNodes = [], newLinks = [], newBilinks = [];
+	for (var i=0; i<nodes.length; i++){
+		var node = nodes[i];
 		newNodes.push({"name": node.name, "title": node.title, "x": node.x, "y": node.y, "fixed": node.fixed});
 	}
-	for(var i=0; i<json.links.length; i++){
-		var link = json.links[i];
+	for(var i=0; i<links.length; i++){
+		var link = links[i];
 		newLinks.push({"notes": link.notes, "source": link.source, "connection": link.connection, "target": link.target});
 	}
-	var newJson = {"nodes": newNodes, "links": newLinks};
+	for (var i=0; i<bilinks.length; i++){
+		var bilink = bilinks[i];
+		newBilinks.push([bilink[0].index, bilink[1].index, bilink[2].index]);
+	}
+	var newJson = {"nodes": newNodes, "links": newLinks, "bilinks": newBilinks};
 	document.getElementById("out").innerHTML = JSON.stringify(newJson);
 }
 }());//initialize
