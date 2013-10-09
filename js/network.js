@@ -5,8 +5,8 @@ d3.json("data/network.json", function(error, graph) {
 	    .nodes(graph.nodes)
 	    .links(graph.links)
 	    .size([w, h])
-	    .linkDistance(20)
-	    .charge(-200)
+	    //.linkDistance(20)
+	    .charge(-100)
 	    .on("tick", tick)
 	    .start();
 
