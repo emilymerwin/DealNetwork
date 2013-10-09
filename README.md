@@ -11,4 +11,4 @@
 - [X] Add edit-mode option to release all fixed elements
 - [ ] Display directional arrows? Had an issue with this because of the node scaling by weight
 - [X] don't really need jQuery, get rid of it
-
+- [ ] Add ability to set position of labels
