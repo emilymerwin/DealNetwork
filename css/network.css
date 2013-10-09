@@ -34,35 +34,15 @@
 #legend .swatch.complaints.against{
 	border-bottom: 2px dashed #666666;
 }
-#out{
-	display:none;
-	border:1px solid #e1e1e1;
-	padding:10px;
-	font-size:10px;
-}
-#editor{
-	display:none;
-}
-.edit #editor{
-	display:block;
-}
-.edit .fixed{
-	stroke: red;
-	stroke-width: .5px;
-}
+
 .small{
 	display:none;
 }
-.edit .small {
-	display:inline;
-}
+
 .helper{
 	display:none;
 }
-.edit .helper{
-	fill:  blue;
-	display:block;
-}
+
 .title{
 	color:#666;
 	font-size:10px;

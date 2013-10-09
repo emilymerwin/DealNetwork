@@ -42,45 +42,10 @@ d3.json("data/network.json", function(error, graph) {
 
 	function dragstart(d) {
 		d.fixed = true;
-		d3.select(this).classed("fixed", true);
 	}
 
 	var tooltip = d3.select("#tooltip");
-	
-	//add tooltips to the editor buttons
-	d3.selectAll(".btn")
-		.on("mouseover", function(){
-			if(!this.data){ //prevent browser default tooltips
-				this.data = this.title;
-				this.title = "";
-				this.xPosition = d3.event.pageX;
-				this.yPosition = d3.event.pageY+25;
-			}
-			placeTip(this.xPosition, this.yPosition, this.data);
-		})
-		.on("mouseout", function(event){
-			tooltip.style("display", "none");
-		});
 
-	d3.select("#edit")
-		.property("checked", false)
-		.on("click", function(){
-			document.getElementById("container").classList.toggle("edit");
-		});
-
-	d3.select("#layout")
-		.on("click", function(){
-			document.getElementById("out").style.display = "block"; 
-			printNewJSON(nodes, graph.links, bilinks);
-		});
-
-	d3.select("#unfix")
-		.on("click", function(){
-			force.stop();
-			d3.selectAll(".fixed")
-				.classed("fixed", false)
-				.data(this.data, function(d){ d.fixed = 0; return d; });
-		});
 	// build the arrow.
 	/*svg.append("svg:defs").selectAll("marker")
 	    .data(["end"])      // Different link/path types can be defined here
@@ -221,21 +186,4 @@ d3.json("data/network.json", function(error, graph) {
             .html(html);
 	}
 });//d3.json
-function printNewJSON(nodes, links, bilinks){
-	var newNodes = [], newLinks = [], newBilinks = [];
-	for (var i=0; i<nodes.length; i++){
-		var node = nodes[i];
-		newNodes.push({"name": node.name, "title": node.title, "x": node.x, "y": node.y, "fixed": node.fixed});
-	}
-	for(var i=0; i<links.length; i++){
-		var link = links[i];
-		newLinks.push({"notes": link.notes, "source": link.source, "connection": link.connection, "target": link.target});
-	}
-	for (var i=0; i<bilinks.length; i++){
-		var bilink = bilinks[i];
-		newBilinks.push([bilink[0].index, bilink[1].index, bilink[2].index]);
-	}
-	var newJson = {"nodes": newNodes, "links": newLinks, "bilinks": newBilinks};
-	document.getElementById("out").innerHTML = JSON.stringify(newJson);
-}
 }());//initialize
