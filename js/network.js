@@ -177,13 +177,12 @@ d3.json("data/network.json", function(error, graph) {
 			var tip = data.name+" <span class='title'>"+graph.nodes[data.index].title+"</span><ul>";
 			for(var i=0; i<graph.links.length; i++){
 				var link = graph.links[i]; //use org link arr to evaluate source/target nodes w/o nonsense link between
-				if(link.source.index === data.index){
-					console.log(graph.nodes[link.target.index])
-					
-					tip += "<li>"+link.connection+" "+graph.nodes[link.target.index].name+"</li>";
+
+				if(link.source === data.index){
+					tip += "<li>"+link.connection+" "+graph.nodes[link.target].name+"</li>";
 				}
-				if(link.target.index === data.index){
-					tip += "<li>"+graph.nodes[link.source.index].name+" is/was "+link.connection+"</li>";
+				if(link.target === data.index){
+					tip += "<li>"+graph.nodes[link.source].name+" is/was "+link.connection+"</li>";
 				}
 			}
 			tip += "</ul>";
