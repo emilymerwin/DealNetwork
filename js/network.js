@@ -2,27 +2,13 @@
 d3.json("data/network.json", function(error, graph) {
 	var w = 700, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 
-	if(!graph.bilinks){ //for JSON that wasn't created by this editor
-		//set up for the Bezier curves
-		var nodes = graph.nodes.slice(), links = [], bilinks = [];
-		graph.links.forEach(function(link) {
-		    var s = nodes[link.source],
-		        t = nodes[link.target],
-		        i = {}; // intermediate node
-		    nodes.push(i);
-		    links.push({source: s, target: i}, {source: i, target: t});
-		    bilinks.push([s, i, t]);
-		});
-	}
-	else{
-		var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
-		bilinks.forEach(function(link){
-			for(var i=0; i<link.length; i++){
-				link[i] = nodes[link[i]]; //so link path can stay in sync with node when it moves, I think
-			}
-			links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
-		});
-	}
+	var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
+	bilinks.forEach(function(link){
+		for(var i=0; i<link.length; i++){
+			link[i] = nodes[link[i]]; //so link path can stay in sync with node when it moves, I think
+		}
+		links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
+	});
 
 	var force = d3.layout.force()
 	    .nodes(nodes)
