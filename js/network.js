@@ -77,7 +77,6 @@ d3.json("data/network.json", function(error, graph) {
 		.attr("r", function(d){ return r(d.weight); })
 		.on("mouseover", mouseover)
 	    .on("mouseout", mouseout)
-		.on("dblclick", dblclick)
 		//.style("fill", function(d) { return color(d.group); })
 	    .call(force.drag);
 
@@ -150,12 +149,6 @@ d3.json("data/network.json", function(error, graph) {
 			.style("fill", "#CCCCCC");
 
 		tooltip.style("display", "none");
-	}
-
-	function dblclick(){
-		d3.select(this)
-			.classed("fixed", false)
-			.datum().fixed = false;
 	}
 
 	function placeTip(x, y, html){
