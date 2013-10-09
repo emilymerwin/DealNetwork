@@ -6,7 +6,12 @@
 - "Edit mode" highlights fixed nodes in red and labels all nodes
 - "Save Layout" will print out the new JSON with the current positioning of the nodes
 
+###CurvyLinks branch:
+- Because we are using a modified copy of the original JSON `links` array, `.source` and `.target`, which were modified before, are not modified here - they contain only their indexes, rather than a copy of the actual index node. This means we can access the indexes directly (`d.source` rather than `d.source.index`), but we will also need to go lookup those indexes in the original `links` array to access properties such as `.name` and `.connection`.
+- "Edit mode" will display the curve anchors as little blue dots - you can not currently save the position of these
+
 ###TODO
+- [ ] Save position of Bezier nodes
 - [X] Tooltips only display names, because that is the only info attached to the circle DOM. Need to attach the other info so we can display it.
 - [X] Add edit-mode option to release all fixed elements
 - [ ] Display directional arrows? Had an issue with this because of the node scaling by weight
