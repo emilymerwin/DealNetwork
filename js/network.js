@@ -56,6 +56,11 @@ d3.json("data/network.json", function(error, graph) {
 			return "link " + classes;
 		});
 		//.attr("marker-end", "url(#end)");
+	d3.select("#labels")
+		.property("checked", false)
+		.on("click", function(){
+			document.getElementById("network").classList.toggle("edit");
+		});
 
 	d3.selectAll(".notes")
 		.on("mouseover", function(d){

@@ -38,7 +38,9 @@
 .small{
 	display:none;
 }
-
+.edit .small {
+	display:inline;
+}
 .title{
 	color:#666;
 	font-size:10px;
