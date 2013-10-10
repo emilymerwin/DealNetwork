@@ -182,7 +182,7 @@ d3.json("data/network.json", function(error, graph) {
 					tip += "<li>"+link.connection+" "+graph.nodes[link.target].name+"</li>";
 				}
 				if(link.target === data.index){
-					tip += "<li>"+graph.nodes[link.source].name+" is/was "+link.connection+"</li>";
+					tip += "<li>"+graph.nodes[link.source].name+" "+link.connection+"</li>";
 				}
 			}
 			tip += "</ul>";
