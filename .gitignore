@@ -1,20 +1,6 @@
 
-data/Deal-Ethics - Sheet1.csv
-
-data/network.json
-
-data/connectsionsAsChildren.json
-
 py/ConnectionsAsChildren_CSVtoJSON.py
 
-versions/
+/versions
 
-data/FindReplace.txt
-
-data/strigify2.json
-
-data/testJSON.json
-
-js/curveattempt.js
-
-*.json
+/data
