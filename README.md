@@ -17,5 +17,5 @@
 ####TODO
 - [ ] Display directional arrows? Had an issue with this because of the node scaling by weight
 - [ ] Add ability to set position of labels
-- [ ] What to do with fixed node positions on mobile?
+- [ ] What to do with fixed node positions on mobile? check out <a href="https://www.dashingd3js.com/dynamic-svg-coordinate-space">this</a>
 

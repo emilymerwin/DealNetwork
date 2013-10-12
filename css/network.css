@@ -88,7 +88,7 @@ path.link.complaints.with, path.link.complaint.with { /*we have "filed complaint
 path.link.complaints.against, path.link.fired, path.link.subpoenaed {
 	stroke-dasharray: 0,2 1;
 }
-circle {
+.node {
   fill: #ccc;
   stroke: #FFF;
   stroke-width: 1.5px;
