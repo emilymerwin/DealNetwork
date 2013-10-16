@@ -158,6 +158,7 @@ d3.json("data/network.json", function(error, graph) {
 		.data(path[0].filter(function(d){ return d.__data__.notes; }))
 	  .enter().append("svg:circle")
 		.attr("r", 2)
+		.attr("class", "annotation");
 
 	function tick() {
 	  path.attr("d", function(d) {
