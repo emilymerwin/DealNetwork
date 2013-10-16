@@ -79,7 +79,7 @@ d3.json("data/network.json", function(error, graph) {
 			force.stop();
 			d3.selectAll(".fixed")
 				.classed("fixed", false)
-				.data(this.data, function(d){ d.fixed = 0; return d; });
+				.each(function(d){ d.fixed = 0; });
 		});
 	// build the arrow.
 	/*svg.append("svg:defs").selectAll("marker")
@@ -125,9 +125,11 @@ d3.json("data/network.json", function(error, graph) {
 	  .enter().append("svg:circle")
 		.attr("r", function(d){ if(d.name){ return r(d.weight); } return 2; })
 		.attr("class", function(d){
-			if(!d.name){ return "helper"; }
-			else if(d.fixed){ return "node fixed"; }
-			return "node"; //nothing is currently accessing this
+			var classes = "";
+			if(!d.name) { classes += "helper "; }
+			else { classes += "node "; }
+			if(d.fixed) { classes += "fixed"; }
+			return classes;
 		})
 		//these are being added to the link helpers too, but we won't use those in production so fine for now
 		.on("mouseover", mouseover)
