@@ -153,6 +153,11 @@ d3.json("data/network.json", function(error, graph) {
 	    .attr("x", 8)
 	    .attr("y", ".31em")
 	    .text(function(d) { return d.name; });
+	
+	var annotated = svg.append("svg:g").selectAll("circle")
+		.data(path[0].filter(function(d){ return d.__data__.notes; }))
+	  .enter().append("svg:circle")
+		.attr("r", 2)
 
 	function tick() {
 	  path.attr("d", function(d) {
@@ -165,6 +170,12 @@ d3.json("data/network.json", function(error, graph) {
 
 	  text.attr("transform", function(d) {
 	    return "translate(" + d.x + "," + d.y + ")";
+	  });
+	
+	  annotated.attr("transform", function(d){
+	    var l = d.getTotalLength()/2;
+	    var p = d.getPointAtLength(l);
+	    return "translate(" + p.x + "," + p.y + ")";
 	  });
 	}
 
