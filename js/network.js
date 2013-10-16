@@ -160,7 +160,19 @@ d3.json("data/network.json", function(error, graph) {
 		.data(path[0].filter(function(d){ return d.__data__.notes; }))
 	  .enter().append("svg:circle")
 		.attr("r", 2)
-		.attr("class", "annotation");
+		.attr("class", "annotation")
+		.on("mouseover", function(d, i){
+			d3.select(this).style("stroke-width", "3px")
+			if(!d.xPosition){
+				d.xPosition = d3.event.pageX;
+				d.yPosition = d3.event.pageY;
+			}
+			placeTip(d.xPosition, d.yPosition, d.__data__.notes);
+		})
+		.on("mouseout", function(d){
+			d3.select(this).style("stroke-width", "1.5px"); 
+			tooltip.style("display", "none");
+		});
 
 	function tick() {
 	  path.attr("d", function(d) {
