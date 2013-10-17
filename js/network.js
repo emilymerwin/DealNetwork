@@ -52,7 +52,7 @@ d3.json("data/network.json", function(error, graph) {
 	    .attr("class", function(d, i) {
 			var link = graph.links[i];
 			var classes = link.connection;
-			if(link.notes){ d.notes = link.notes; classes += " notes"; } //so we can set listeners for only those with data to show
+			if(link.notes){ d.notes = link.notes; d.index = i; classes += " notes"; } //so we can annotate only those with data and store index to match links and annotations
 			return "link " + classes;
 		});
 		//.attr("marker-end", "url(#end)");
@@ -60,20 +60,6 @@ d3.json("data/network.json", function(error, graph) {
 		.property("checked", false)
 		.on("click", function(){
 			document.getElementById("network").classList.toggle("edit");
-		});
-
-	d3.selectAll(".notes")
-		.on("mouseover", function(d){
-			d3.select(this).style("stroke-width", "3px")
-			if(!d.xPosition){
-				d.xPosition = d3.event.pageX;
-				d.yPosition = d3.event.pageY;
-			}
-			placeTip(d.xPosition, d.yPosition, d.notes);
-		})
-		.on("mouseout", function(d){
-			d3.select(this).style("stroke-width", "1.5px"); 
-			tooltip.style("display", "none");
 		});
 
 	var circle = svg.append("svg:g").selectAll("circle")
@@ -102,6 +88,31 @@ d3.json("data/network.json", function(error, graph) {
 	    .attr("x", 8)
 	    .attr("y", ".31em")
 	    .text(function(d) { return d.name; });
+	
+	var annotated = svg.append("svg:g").selectAll("circle")
+		.data(path[0].filter(function(d){ return d.__data__.notes; }))
+	  .enter().append("svg:circle")
+		.attr("r", 2)
+		.attr("class", "annotation notes");
+
+	//add tooltips to annotations AND their corresponding links
+	d3.selectAll(".notes")
+		.on("mouseover", function(d){
+			d.index = d.index || d.__data__.index; //data is nested differently on links vs annotations
+
+			d3.select(path[0][d.index]).style("stroke-width", "3px");
+			//annotated.filter(function(a){ return a.__data__.index === d.index; }).style("stroke-width", "1.5px");
+
+			if(!d.xPosition){
+				d.xPosition = d3.event.pageX;
+				d.yPosition = d3.event.pageY;
+			}
+			placeTip(d.xPosition, d.yPosition, d.notes || d.__data__.notes);
+		})
+		.on("mouseout", function(d){
+			d3.select(path[0][d.index]).style("stroke-width", "1.5px");
+			tooltip.style("display", "none");
+		});
 
 	function tick() {
 	  path.attr("d", function(d) {
@@ -114,6 +125,12 @@ d3.json("data/network.json", function(error, graph) {
 
 	  text.attr("transform", function(d) {
 	    return "translate(" + d.x + "," + d.y + ")";
+	  });
+	
+	  annotated.attr("transform", function(d){
+	    var l = d.getTotalLength()/2;
+	    var p = d.getPointAtLength(l);
+	    return "translate(" + p.x + "," + p.y + ")";
 	  });
 	}
 

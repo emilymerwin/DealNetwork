@@ -45,6 +45,11 @@
 	color:#666;
 	font-size:10px;
 }
+.annotation {
+	stroke:#666;
+	stroke-width:1px;
+	fill:white;
+}
 path.link {
   fill: none;
   stroke: #666;
