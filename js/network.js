@@ -1,5 +1,5 @@
 (function () {
-d3.json("data/network.json", function(error, graph) {
+d3.json("data/network_raw.json", function(error, graph) {
 	var w = 700, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 	var force = d3.layout.force()
 	    .nodes(graph.nodes)
@@ -56,7 +56,7 @@ d3.json("data/network.json", function(error, graph) {
 			force.stop();
 			d3.selectAll(".fixed")
 				.classed("fixed", false)
-				.data(this.data, function(d){ d.fixed = 0; return d; });
+				.each(function(d){ d.fixed = 0; });
 		});
 	// build the arrow.
 	/*svg.append("svg:defs").selectAll("marker")
@@ -75,26 +75,12 @@ d3.json("data/network.json", function(error, graph) {
 	var path = svg.append("svg:g").selectAll("path")
 	    .data(force.links())
 	  .enter().append("svg:path")
-	    .attr("class", function(d) {
+	    .attr("class", function(d, i) {
 			var classes = d.connection;
-			if(d.notes){ classes += " notes"; } //so we can set listeners for only those with data to show
+			if(d.notes){ d.index = i; classes += " notes"; } //so we can annotate only those with data and store index to match links and annotations
 			return "link " + classes;
 		});
 		//.attr("marker-end", "url(#end)");
-
-	d3.selectAll(".notes")
-		.on("mouseover", function(d){
-			d3.select(this).style("stroke-width", "3px")
-			if(!d.xPosition){
-				d.xPosition = d3.event.pageX;
-				d.yPosition = d3.event.pageY;
-			}
-			placeTip(d.xPosition, d.yPosition, d.notes);
-		})
-		.on("mouseout", function(d){
-			d3.select(this).style("stroke-width", "1.5px"); 
-			tooltip.style("display", "none");
-		});
 
 	var circle = svg.append("svg:g").selectAll("circle")
 	    .data(force.nodes())
@@ -124,8 +110,32 @@ d3.json("data/network.json", function(error, graph) {
 	    .attr("x", 8)
 	    .attr("y", ".31em")
 	    .text(function(d) { return d.name; });
+	
+	var annotated = svg.append("svg:g").selectAll("circle")
+		.data(path[0].filter(function(d){ return d.__data__.notes; }))
+	  .enter().append("svg:circle")
+		.attr("r", 2)
+		.attr("class", "annotation notes");
 
-	// Use elliptical arc path segments to doubly-encode directionality.
+	//add tooltips to annotations AND their corresponding links
+	d3.selectAll(".notes")
+		.on("mouseover", function(d){
+			d.index = d.index || d.__data__.index; //data is nested differently on links vs annotations
+
+			d3.select(path[0][d.index]).style("stroke-width", "3px");
+			//annotated.filter(function(a){ return a.__data__.index === d.index; }).style("stroke-width", "1.5px");
+
+			if(!d.xPosition){
+				d.xPosition = d3.event.pageX;
+				d.yPosition = d3.event.pageY;
+			}
+			placeTip(d.xPosition, d.yPosition, d.notes || d.__data__.notes);
+		})
+		.on("mouseout", function(d){
+			d3.select(path[0][d.index]).style("stroke-width", "1.5px");
+			tooltip.style("display", "none");
+		});
+
 	function tick() {
 	  path.attr("d", function(d) {
 	    /*var dx = d.target.x - d.source.x,
@@ -142,6 +152,12 @@ d3.json("data/network.json", function(error, graph) {
 	  text.attr("transform", function(d) {
 	    return "translate(" + d.x + "," + d.y + ")";
 	  });
+	
+	  annotated.attr("transform", function(d){
+	    var l = d.getTotalLength()/2;
+	    var p = d.getPointAtLength(l);
+	    return "translate(" + p.x + "," + p.y + ")";
+	  });
 	}
 
 	function mouseover() {
@@ -152,12 +168,13 @@ d3.json("data/network.json", function(error, graph) {
 
 			var tip = data.name+" <span class='title'>"+data.title+"</span><ul>";
 			for(var i=0; i<graph.links.length; i++){
-				var thisLink = graph.links[i];
-				if(thisLink.source.index === data.index){
-					tip += "<li>"+thisLink.connection+" "+thisLink.target.name+"</li>";
+				var link = graph.links[i];
+
+				if(link.source.index === data.index){
+					tip += "<li>"+link.connection+" "+link.target.name+"</li>";
 				}
-				if(thisLink.target.index === data.index){
-					tip += "<li>"+thisLink.source.name+" is/was "+thisLink.connection+"</li>";
+				if(link.target.index === data.index){
+					tip += "<li>"+link.source.name+" "+link.connection+"</li>";
 				}
 			}
 			tip += "</ul>";

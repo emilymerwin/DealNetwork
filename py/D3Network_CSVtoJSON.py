@@ -2,7 +2,7 @@
 import csv
 import json
 
-f = open( '../data/Deal-Ethics - Sheet1.csv', 'rU' )
+f = open( '../data/Deal-Ethics-2 - Copy of Sheet1.csv', 'rU' )
 reader = csv.DictReader( f, dialect='excel')
 nodeArr = []
 linkArr = []
@@ -39,6 +39,6 @@ tree = {"nodes": nodeArr, "links": linkArr}
 out = json.dumps(tree, indent=4)
 
 #print out
-f = open( '../data/network.json', 'w')
+f = open( '../data/network_raw.json', 'w')
 f.write(out)
 print "JSON saved!"
