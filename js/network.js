@@ -1,6 +1,7 @@
 (function () {
 d3.json("data/network.json", function(error, graph) {
 	var w = 700, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+	var original = true;
 
 	var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
 	bilinks.forEach(function(link){
@@ -15,7 +16,8 @@ d3.json("data/network.json", function(error, graph) {
 	    .links(links)
 	    .size([w, h])
 	    //.linkDistance(20)
-	    .charge(-100)
+		.gravity(0) //we've already set up the layout
+	    .charge(0)
 	    .on("tick", tick)
 	    .start();
 
@@ -27,6 +29,10 @@ d3.json("data/network.json", function(error, graph) {
 		.on("dragstart", dragstart);
 
 	function dragstart(d) {
+		if(original){ //release fixed bilinks if user starts to re-arrange nodes to avoid crazy arcs
+			d3.selectAll(".link").data().forEach(function(d){ d[1].fixed = 0; });
+			original = false;
+		}
 		d.fixed = true;
 	}
 
