@@ -88,12 +88,34 @@ d3.json("data/network.json", function(error, graph) {
 	    .attr("x", 8)
 	    .attr("y", ".31em")
 	    .attr("class", "shadow")
-	    .text(function(d) { return d.name; });
+	    //.text(function(d) { return d.name; });
+		.each(function(d){
+			if(d.name === "Ga. Govt. Transparency & Campaign Finance Commission"){
+				d3.select(this).append("tspan").text("Ga. Govt. Transparency ");
+				d3.select(this).append("tspan")
+					.attr('x', 15)
+					.attr('dy', 15)
+					.text("& Campaign Finance Commission");
+			} else {
+				d3.select(this).text(function(d){ return d.name; });
+			}
+		});
 
 	text.append("svg:text")
 	    .attr("x", 8)
 	    .attr("y", ".31em")
-	    .text(function(d) { return d.name; });
+	    //.text(function(d) { return d.name; });
+		.each( function(d){
+			if(d.name === "Ga. Govt. Transparency & Campaign Finance Commission"){
+				d3.select(this).append("tspan").text("Ga. Govt. Transparency ");
+				d3.select(this).append("tspan")
+					.attr('x', 15)
+					.attr('dy', 15)
+					.text("& Campaign Finance Commission");
+			} else {
+				d3.select(this).text(function(d){ return d.name; });
+			}
+		});
 	
 	var annotated = svg.append("svg:g").selectAll("circle")
 		.data(path[0].filter(function(d){ return d.__data__.notes; }))
