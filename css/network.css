@@ -1,6 +1,6 @@
 #container{
 	font: 12px sans-serif;
-	max-width:960px;
+	max-width:980px;
 	color:#222222;
 }
 #tooltip {
@@ -19,7 +19,8 @@
 	line-height:17px;
 }
 #legend .swatch{
-	margin:10px;
+	font-size:11px;
+	margin:10px 8px 0 8px;
 	float:left;
 }
 #legend .swatch.appointed{
@@ -90,8 +91,8 @@ path.link.complaints.with, path.link.complaint.with { /*we have "filed complaint
   stroke: #d6616b;
 }
 
-path.link.complaints.against, path.link.fired, path.link.subpoenaed {
-	stroke-dasharray: 0,2 1;
+path.link.complaints.against, path.link.fired, path.link.subpoenaed, path.link.investigated {
+	stroke-dasharray: 4,4;
 }
 .node {
   fill: #ccc;
