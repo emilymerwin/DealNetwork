@@ -179,8 +179,8 @@ d3.json("data/network.json", function(error, graph) {
 			//annotated.filter(function(a){ return a.__data__.index === d.index; }).style("stroke-width", "1.5px");
 
 			if(!d.xPosition){
-				d.xPosition = d3.event.pageX;
-				d.yPosition = d3.event.pageY;
+				d.xPosition = d3.event.pageX+10;
+				d.yPosition = d3.event.pageY-5;
 			}
 			placeTip(d.xPosition, d.yPosition, d.notes || d.__data__.notes);
 		})
@@ -229,8 +229,8 @@ d3.json("data/network.json", function(error, graph) {
 			tip += "</ul>";
 
 			me.tip = tip; //store it so we don't have to parse all that again
-			me.xPosition = data.px+40;
-		    me.yPosition = data.py-20;
+			me.xPosition = d3.event.pageX+20;
+		    me.yPosition = d3.event.pageY-20;
 		}
 		placeTip(me.xPosition, me.yPosition, me.tip);
 		
