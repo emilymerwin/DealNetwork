@@ -191,9 +191,13 @@ d3.json("data/network.json", function(error, graph) {
 			me.tip = tip; //store it so we don't have to parse all that again
 			me.xPosition = d3.event.pageX+20;
 		    me.yPosition = d3.event.pageY-20;
+			if(me.xPosition + 140 > w){ //keep it in the container
+				me.xPosition = me.xPosition - 107;
+				me.yPosition = me.yPosition + 40;
+			}
 		}
 		placeTip(me.xPosition, me.yPosition, me.tip);
-		
+
 		me.transition()
 			.duration(5)
 			.style("fill", "#636363");
