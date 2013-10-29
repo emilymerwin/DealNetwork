@@ -4,6 +4,13 @@ d3.json("data/network.json", function(error, graph) {
 	var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
 	var original = true;
 
+	bilinks.forEach(function(link){
+		for(var i=0; i<link.length; i++){
+			link[i] = nodes[link[i]]; //so link path can stay in sync with node when it moves, I think
+		}
+		links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
+	});
+
 	if(w < 700){
 		h = w*h/700+75; //stretch it a little vertically since we have more screen to work with that way
 		nodes.forEach(function(node){
@@ -11,12 +18,6 @@ d3.json("data/network.json", function(error, graph) {
 			node.y = node.y*(h/500);
 		});
 	}
-	bilinks.forEach(function(link){
-		for(var i=0; i<link.length; i++){
-			link[i] = nodes[link[i]]; //so link path can stay in sync with node when it moves, I think
-		}
-		links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
-	});
 
 	var force = d3.layout.force()
 	    .nodes(nodes)
