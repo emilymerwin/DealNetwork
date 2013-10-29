@@ -1,6 +1,7 @@
 (function () {
 d3.json("data/network.json", function(error, graph) {
-	var w = 700, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+
+	var w = parseInt(d3.select("body").style("width")), h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 
 	if(!graph.bilinks){ //for JSON that wasn't created by this editor
 		//set up for the Bezier curves
@@ -23,6 +24,16 @@ d3.json("data/network.json", function(error, graph) {
 			links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
 		});
 	}
+
+	if(w < 700){ //adjust coordinates for smaller screens
+		h = w*h/700+75; //stretch it a little vertically since we have more screen to work with that way
+		nodes.forEach(function(node){
+			node.x = node.x*(w/700);
+			node.y = node.y*(h/500);
+		});
+	} else{ 
+		w = 700; //because of the charge/gravity
+	};
 
 	var force = d3.layout.force()
 	    .nodes(nodes)
