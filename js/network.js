@@ -1,9 +1,16 @@
 (function () {
 d3.json("data/network.json", function(error, graph) {
-	var w = 700, h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+	var w = parseInt(d3.select("body").style("width")), h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+	var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
 	var original = true;
 
-	var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
+	if(w < 700){
+		h = w*h/700+75; //stretch it a little vertically since we have more screen to work with that way
+		nodes.forEach(function(node){
+			node.x = node.x*(w/700);
+			node.y = node.y*(h/500);
+		});
+	}
 	bilinks.forEach(function(link){
 		for(var i=0; i<link.length; i++){
 			link[i] = nodes[link[i]]; //so link path can stay in sync with node when it moves, I think
