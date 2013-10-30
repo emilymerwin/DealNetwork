@@ -2,6 +2,7 @@
 - "Production" branch is the version live on the mysite here: http://www.myajc.com/deal-network/
 - Ran 10/26/13 with <a href="http://www.myajc.com/news/news/ethics-laws-vex-watchdogs-state-officials-alike/nbYgB/">this</a> story
 
+##How it works
 - Uses <a href="https://github.com/mbostock/d3/wiki/Force-Layout" target="_blank">D3 force layout</a>
 
 ####Production branch

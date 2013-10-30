@@ -23,8 +23,8 @@ d3.json("data/network.json", function(error, graph) {
 	    .nodes(nodes)
 	    .links(links)
 	    .size([w, h])
-	    //.linkDistance(20)
-		.gravity(0) //we've already set up the layout
+	    .linkDistance(5)
+	    .gravity(0)
 	    .charge(0)
 	    .on("tick", tick)
 	    .start();
@@ -151,14 +151,17 @@ d3.json("data/network.json", function(error, graph) {
 		});
 
 	function tick() {
-	  path.attr("d", function(d) {
-	    return "M" + d[0].x + "," + d[0].y + "S" + d[1].x + "," + d[1].y + " " + d[2].x + "," + d[2].y;
-	  });
-
-	  circle.attr("transform", function(d) {
+	  circle.attr("transform", function(d, i) {
+		rad = d3.select(this).attr("r");
+		d.x = Math.max(rad, Math.min(w - rad, d.x)); //constrain nodes to layout bounds
+		d.y = Math.max(rad, Math.min(h - rad, d.y));
 	    return "translate(" + d.x + "," + d.y + ")";
 	  });
 
+	  path.attr("d", function(d) {
+	    return "M" + d[0].x + "," + d[0].y + "S" + d[1].x + "," + d[1].y + " " + d[2].x + "," + d[2].y;
+	  });
+	  
 	  text.attr("transform", function(d) {
 	    return "translate(" + d.x + "," + d.y + ")";
 	  });
