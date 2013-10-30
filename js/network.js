@@ -17,6 +17,8 @@ d3.json("data/network.json", function(error, graph) {
 			node.x = node.x*(w/700);
 			node.y = node.y*(h/500);
 		});
+	} else {
+		w = 700;
 	}
 
 	var force = d3.layout.force()
