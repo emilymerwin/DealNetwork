@@ -9,18 +9,21 @@
 	</head>
 	<body>
 		<div id="container">
+			<!--[if lte IE 8]><p>Your browser is out of date. Please upgrade your browser to the latest version to interact with this graphic.</p><img src="css/deal_IE8_fallback.png" alt="network chart"/><![endif]-->
+			<!--[if gte IE 9]><!-->
 			<div id="legend">
 				<div class='swatch appointed'>Appointed/ reappointed</div>
 				<div class='swatch employs'>Employed/ employs/ hired</div>
 				<div class='swatch complaints'>Filed complaint(s) with</div>
 				<div class='swatch complaints against'>Filed complaint(s) against/ subpoenaed/ fired/ investigated</div><br><br>
-				<div class="swatch"><img src="css/annotation.png" width="12px;" height="9px;">Annotated</div>
+				<div class="swatch"><img src="css/annotation.png" width="12" height="9" alt="">Annotated</div>
 			</div>
 			<div id="network"></div>
-			<input type="checkbox" id="labels">Label all</input>
+			<input type="checkbox" id="labels">Label all
 			<div id="tooltip"></div>
 		</div>
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="js/network.js"></script>
+		<!--<![endif]-->
 	</body>
 </html>

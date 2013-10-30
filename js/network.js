@@ -11,7 +11,7 @@ d3.json("data/network.json", function(error, graph) {
 		links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
 	});
 
-	if(w < 700){
+	if(w < 700){ //adjust coordinates for smaller screens
 		h = w*h/700+75; //stretch it a little vertically since we have more screen to work with that way
 		nodes.forEach(function(node){
 			node.x = node.x*(w/700);
