@@ -2,6 +2,7 @@
 d3.json("data/network.json", function(error, graph) {
 
 	var w = parseInt(d3.select("body").style("width")), h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
+	var charge = 0;
 
 	if(!graph.bilinks){ //for JSON that wasn't created by this editor
 		//set up for the Bezier curves
@@ -14,6 +15,7 @@ d3.json("data/network.json", function(error, graph) {
 		    links.push({source: s, target: i}, {source: i, target: t});
 		    bilinks.push([s, i, t]);
 		});
+		charge = -25; //give it some space if the layout is fresh
 	}
 	else{
 		var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
@@ -39,8 +41,9 @@ d3.json("data/network.json", function(error, graph) {
 	    .nodes(nodes)
 	    .links(links)
 	    .size([w, h])
-	    //.linkDistance(20)
-	    .charge(-100)
+	    .linkDistance(5)
+		.gravity(0)
+		.charge(charge)
 	    .on("tick", tick)
 	    .start();
 
