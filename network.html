@@ -9,6 +9,8 @@
 	</head>
 	<body>
 		<div id="container">
+			<!--[if lte IE 8]><p>Your browser is out of date. Please upgrade your browser to the latest version to interact with this graphic.</p><img src="css/deal_IE8_fallback.png" alt="network chart"/><![endif]-->
+			<!--[if gte IE 9]><!-->
 			<div id="legend">
 				<div class='swatch appointed'>Appointed/ reappointed</div>
 				<div class='swatch employs'>Employed/ employs/ hired</div>
@@ -29,5 +31,6 @@
 		</div>
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="js/network.js"></script>
+		<!--<![endif]-->
 	</body>
 </html>
