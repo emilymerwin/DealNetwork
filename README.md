@@ -2,6 +2,7 @@
 - "Production" branch is the version live on the mysite here: http://www.myajc.com/deal-network/
 - Ran 10/26/13 with <a href="http://www.myajc.com/news/news/ethics-laws-vex-watchdogs-state-officials-alike/nbYgB/">this</a> story
 
+##How it works
 - Uses <a href="https://github.com/mbostock/d3/wiki/Force-Layout" target="_blank">D3 force layout</a>
 - D3Network_CSVtoJSON.py takes CSV from a spreadsheet formatted like <a href="https://docs.google.com/spreadsheet/ccc?key=0AhCTN8bJ6kLCdHBBNlVtU0lRTm1wVmlzX1lzV0tnV3c&usp=sharing">this</a> and spits out JSON formatted how the D3 force directed layout wants it
 - Default view hides labels for nodes with fewer than three connections (a few appear as though they fit that criteria but actually have multiple links to the same people that you can't see)
@@ -20,6 +21,5 @@
 - [ ] Display directional arrows? Had an issue with this because of the node scaling by weight
 - [ ] Add ability to set position of labels
 - [ ] Different colored nodes to signify person vs non-person.
-- [ ] IE 8 fallback
 - [ ] Highlight the relevant links when hovering over legend items
 
