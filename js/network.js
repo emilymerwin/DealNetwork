@@ -16,8 +16,7 @@ d3.json("data/network.json", function(error, graph) {
 		    bilinks.push([s, i, t]);
 		});
 		charge = -25; //give it some space if the layout is fresh
-	}
-	else{
+	} else{
 		var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
 		bilinks.forEach(function(link){
 			for(var i=0; i<link.length; i++){
@@ -35,7 +34,7 @@ d3.json("data/network.json", function(error, graph) {
 		});
 	} else{ 
 		w = 700; //because of the charge/gravity
-	};
+	}
 
 	var force = d3.layout.force()
 	    .nodes(nodes)
