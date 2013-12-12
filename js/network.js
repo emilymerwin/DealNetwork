@@ -17,8 +17,8 @@ d3.json("data/network.json", function(error, graph) {
 			node.x = node.x*(w/700);
 			node.y = node.y*(h/500);
 		});
-	} else {
-		w = 700;
+	} else{ 
+		w = 700; //because of the charge/gravity
 	}
 
 	var force = d3.layout.force()
