@@ -18,6 +18,8 @@
 - Because we are using a modified copy of the original JSON `links` array, `.source` and `.target`, which were modified on the (origin) <a href="https://github.com/emilymerwinajc/DealNetwork/tree/StraightLines">StraightLines branch</a>, are not modified here - they contain only their indexes, rather than a copy of the actual index node. This means we can access the indexes directly (`d.source` rather than `d.source.index`), but we will also need to go lookup those indexes in the original `links` array to access properties such as `.name` and `.connection`.
 
 ####TODO
+- [ ] Option to add mug shots
+- [ ] Clip whitespace from persons in parser
 - [ ] Display directional arrows? Had an issue with this because of the node scaling by weight
 - [ ] Add ability to set position of labels
 - [ ] Different colored nodes to signify person vs non-person.
