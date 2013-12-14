@@ -83,21 +83,6 @@ path.link {
   stroke-width: 1.5px;
 }
 
-path.link.employed, path.link.employs, path.link.hired { /*what's the difference between "formerly employed by", "employed by" and "employs"? two of those are probably the same*/
-  stroke: #3182bd;
-}
-
-path.link.appointed, path.link.reappointed {
-  stroke: #31a354;
-}
-
-path.link.complaints.with, path.link.complaint.with { /*we have "filed complaints against" and "filed complaints with", these should probably be separated eventually*/
-  stroke: #d6616b;
-}
-
-path.link.complaints.against, path.link.fired, path.link.subpoenaed, path.link.investigated {
-	stroke-dasharray: 4,4;
-}
 .node {
   fill: #ccc;
   stroke: #FFF;

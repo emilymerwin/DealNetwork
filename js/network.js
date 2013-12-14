@@ -113,7 +113,7 @@ d3.json("data/network.json", function(error, graph) {
 	  .enter().append("svg:path")
 	    .attr("class", function(d, i) {
 			var link = graph.links[i];
-			var classes = link.connection;
+			var classes;
 			if(link.notes){ d.notes = link.notes; d.index = i; classes += " notes"; } //so we can annotate only those with data and store index to match links and annotations
 			return "link " + classes;
 		});
