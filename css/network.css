@@ -27,18 +27,7 @@
 	margin:10px 8px 0 8px;
 	float:left;
 }
-#legend .swatch.appointed{
-	border-bottom: 2px solid #31a354;
-}
-#legend .swatch.complaints{
-	border-bottom: 2px solid #d6616b;
-}
-#legend .swatch.employs{
-	border-bottom: 2px solid #3182bd;
-}
-#legend .swatch.complaints.against{
-	border-bottom: 2px dashed #666666;
-}
+
 #out{
 	display:none;
 	border:1px solid #e1e1e1;
