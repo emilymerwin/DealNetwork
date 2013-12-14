@@ -4,27 +4,15 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 	var w = parseInt(d3.select("body").style("width")), h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 	var charge = 0;
 
-	if(!graph.bilinks){ //for JSON that wasn't created by this editor
-		//set up for the Bezier curves
-		var nodes = graph.nodes.slice(), links = [], bilinks = [];
-		graph.links.forEach(function(link) {
-		    var s = nodes[link.source],
-		        t = nodes[link.target],
-		        i = {}; // intermediate node
-		    nodes.push(i);
-		    links.push({source: s, target: i}, {source: i, target: t});
-		    bilinks.push([s, i, t]);
-		});
-		charge = -25; //give it some space if the layout is fresh
-	} else{
-		var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
-		bilinks.forEach(function(link){
-			for(var i=0; i<link.length; i++){
-				link[i] = nodes[link[i]]; //so link path can stay in sync with node when it moves, I think
-			}
-			links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
-		});
-	}
+	var nodes = graph.nodes.slice(), bilinks = graph.bilinks.slice(), links = [];
+	var original = true;
+
+	bilinks.forEach(function(link){
+		for(var i=0; i<link.length; i++){
+			link[i] = nodes[link[i]]; //so link path can stay in sync with node when it moves, I think
+		}
+		links.push({source: link[0], target: link[1]}, {source: link[1], target: link[2]});
+	});
 
 	if(w < 960){ //adjust coordinates for smaller screens
 		h = w*h/960+75; //stretch it a little vertically since we have more screen to work with that way
@@ -33,7 +21,7 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 			node.y = node.y*(h/500);
 		});
 	} else{ 
-		w = 960; //because of the charge/gravity
+		w = 960;
 	}
 
 	var force = d3.layout.force()
@@ -42,7 +30,7 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 	    .size([w, h])
 	    .linkDistance(5)
 		.gravity(0)
-		.charge(charge)
+		.charge(0)
 	    .on("tick", tick)
 	    .start();
 
@@ -54,59 +42,14 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 		.on("dragstart", dragstart);
 
 	function dragstart(d) {
+		if(original){ //release fixed bilinks if user starts to re-arrange nodes to avoid crazy arcs
+			d3.selectAll(".link").data().forEach(function(d){ d[1].fixed = 0; });
+			original = false;
+		}
 		d.fixed = true;
-		d3.select(this).classed("fixed", true);
 	}
 
 	var tooltip = d3.select("#tooltip");
-	
-	//add tooltips to the editor buttons
-	d3.selectAll(".btn")
-		.on("mouseover", function(){
-			if(!this.data){ //prevent browser default tooltips
-				this.data = this.title;
-				this.title = "";
-				this.xPosition = d3.event.pageX;
-				this.yPosition = d3.event.pageY+25;
-			}
-			placeTip(this.xPosition, this.yPosition, this.data);
-		})
-		.on("mouseout", function(event){
-			tooltip.style("display", "none");
-		});
-
-	d3.select("#edit")
-		.property("checked", false)
-		.on("click", function(){
-			document.getElementById("container").classList.toggle("edit");
-		});
-
-	d3.select("#layout")
-		.on("click", function(){
-			document.getElementById("out").style.display = "block"; 
-			printNewJSON(nodes, graph.links, bilinks);
-		});
-
-	d3.select("#unfix")
-		.on("click", function(){
-			force.stop();
-			d3.selectAll(".fixed")
-				.classed("fixed", false)
-				.each(function(d){ d.fixed = 0; });
-		});
-	// build the arrow.
-	/*svg.append("svg:defs").selectAll("marker")
-	    .data(["end"])      // Different link/path types can be defined here
-	  .enter().append("svg:marker")    // This section adds in the arrows
-	    .attr("id", String)
-	    .attr("viewBox", "0 -5 10 10")
-	    .attr("refX", 15)
-	    //.attr("refY", -1.5) //only need this is if you have curved lines
-	    .attr("markerWidth", 6)
-	    .attr("markerHeight", 6)
-	    .attr("orient", "auto")
-	  .append("svg:path")
-	    .attr("d", "M0,-5L10,0L0,5");*/
 
 	var path = svg.append("svg:g").selectAll("path")
 	    .data(bilinks)
@@ -117,24 +60,19 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 			if(link.notes){ d.notes = link.notes; d.index = i; classes += " notes"; } //so we can annotate only those with data and store index to match links and annotations
 			return "link " + classes;
 		});
-		//.attr("marker-end", "url(#end)");
+
+	d3.select("#labels")
+		.property("checked", false)
+		.on("click", function(){
+			document.getElementById("network").classList.toggle("edit");
+		});
 
 	var circle = svg.append("svg:g").selectAll("circle")
-	    .data(force.nodes())
+	    .data(graph.nodes.filter(function(d){ return d.name; }))
 	  .enter().append("svg:circle")
-		.attr("r", function(d){ if(d.name){ return r(d.weight); } return 2; })
-		.attr("class", function(d){
-			var classes = "";
-			if(!d.name) { classes += "helper "; }
-			else { classes += "node "; }
-			if(d.fixed) { classes += "fixed"; }
-			return classes;
-		})
-		//these are being added to the link helpers too, but we won't use those in production so fine for now
+		.attr("r", function(d){ return r(d.weight); })
 		.on("mouseover", mouseover)
 	    .on("mouseout", mouseout)
-		.on("dblclick", dblclick)
-		//.style("fill", function(d) { return color(d.group); })
 	    .call(force.drag);
 
 	var text = svg.append("svg:g").selectAll("g")
@@ -271,12 +209,6 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 		tooltip.style("display", "none");
 	}
 
-	function dblclick(){
-		d3.select(this)
-			.classed("fixed", false)
-			.datum().fixed = false;
-	}
-
 	function placeTip(x, y, html){
 		tooltip
             .style("left", x+"px")
@@ -285,21 +217,4 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
             .html(html);
 	}
 });//d3.json
-function printNewJSON(nodes, links, bilinks){
-	var newNodes = [], newLinks = [], newBilinks = [];
-	for (var i=0; i<nodes.length; i++){
-		var node = nodes[i];
-		newNodes.push({"name": node.name, "title": node.title, "bio": node.bio, "x": node.x, "y": node.y, "fixed": node.fixed});
-	}
-	for(var i=0; i<links.length; i++){
-		var link = links[i];
-		newLinks.push({"notes": link.notes, "source": link.source, "connection": link.connection, "target": link.target});
-	}
-	for (var i=0; i<bilinks.length; i++){
-		var bilink = bilinks[i];
-		newBilinks.push([bilink[0].index, bilink[1].index, bilink[2].index]);
-	}
-	var newJson = {"nodes": newNodes, "links": newLinks, "bilinks": newBilinks};
-	document.getElementById("out").innerHTML = JSON.stringify(newJson);
-}
 }());//initialize

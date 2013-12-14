@@ -15,14 +15,7 @@
 				<div class="swatch"><img src="css/annotation.png" width="25" height="9" alt="">Annotated</div>
 			</div>
 			<div id="network"></div>
-			<div id="tools">
-				<input type="checkbox" class="btn" id="edit" title="Note: You don't have to be in edit mode to make changes, it just shows you behind-the-scenes stuff that might be helpful.">Edit mode?
-				<button id="layout" class="btn" title="Copy the output and email it to Emily.">Save Layout</button>
-				<div id="editor">
-					<p>Drag the circles to the desired location. Once dragged, a circle becomes "fixed" and will hold its position until you drag it again. Only fixed nodes will maintain their exact coordinates once you save your layout. Circles with a red outline are fixed - double-click them to un-fix.</p><button class="btn" id="unfix" title="All nodes will respond when others are dragged">Clear fixed?</button>
-				</div>
-				<div id="out"></div>
-			</div>
+			<input type="checkbox" id="labels">Label all
 			<div id="tooltip"></div>
 			<script src="http://d3js.org/d3.v3.min.js"></script>
 			<script src="js/network.js"></script>
