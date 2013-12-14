@@ -236,10 +236,14 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 				var link = graph.links[i]; //use org link arr to evaluate source/target nodes w/o nonsense link between
 
 				if(link.source === data.index){
-					tip += "<li>"+link.connection+" "+graph.nodes[link.target].name+"</li>";
+					if(link.target === 0){
+						tip += "<li>"+link.connection+"</li>";
+					} else {
+						tip += "<li>"+graph.nodes[link.target].name+"</li>";
+					}
 				}
 				if(link.target === data.index){
-					tip += "<li>"+graph.nodes[link.source].name+" "+link.connection+"</li>";
+						tip += "<li>"+graph.nodes[link.source].name+"</li>";
 				}
 			}
 			tip += "</ul>";
