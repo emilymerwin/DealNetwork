@@ -18,6 +18,8 @@ for i, row in enumerate(reader):
 		keyArr.append(node)
 		num = len(keyArr)-1
 		nodeArr.append({"name": row['Name'], "title": row['Title']})
+		if row['Name or organization'] != "Georgia Gwinnett College Foundation" and row['Name'] != "One Sugarloaf Centre" and row['Name'] != "Gwinnett Chamber of Commerce":
+			linkArr.append({"source": num, "target": 0, "connection": row['Link'], "notes": row['Description']})
 
 	else:
 		num = keyArr.index(node)
@@ -28,6 +30,7 @@ for i, row in enumerate(reader):
 		keyArr.append(node2)
 		num2 = len(keyArr)-1
 		nodeArr.append({"name": row['Name or organization'], "title": row['Title2']})
+		linkArr.append({"source": num2, "target": 0, "connection": row['Title2'], "notes": row['Description']})
 
 	else:
 		num2 = keyArr.index(node2)
