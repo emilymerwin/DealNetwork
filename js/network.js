@@ -61,11 +61,11 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 			return "link " + classes;
 		});
 
-	d3.select("#labels")
-		.property("checked", false)
-		.on("click", function(){
-			document.getElementById("network").classList.toggle("edit");
-		});
+	// d3.select("#labels")
+	// 	.property("checked", false)
+	// 	.on("click", function(){
+	// 		document.getElementById("network").classList.toggle("edit");
+	// 	});
 
 	var circle = svg.append("svg:g").selectAll("circle")
 	    .data(graph.nodes.filter(function(d){ return d.name; }))
@@ -79,7 +79,7 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 	    //.data(force.nodes().filter(function(d) {return d.weight >=3;}))
 		.data(graph.nodes)
 	  .enter().append("svg:g")
-		.classed("small", function(d){ return d.weight<3; });
+		//.classed("small", function(d){ return d.weight<3; });
 
 	// A copy of the text with a thick white stroke for legibility.
 	text.append("svg:text")
