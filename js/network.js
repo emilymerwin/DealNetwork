@@ -1,5 +1,5 @@
 (function () {
-d3.json("data/network.json", function(error, graph) {
+d3.json("data/networkGwinnett.json", function(error, graph) {
 
 	var w = parseInt(d3.select("body").style("width")), h = 500, r = d3.scale.sqrt().domain([0, 20]).range([0, 20]);
 	var charge = 0;
