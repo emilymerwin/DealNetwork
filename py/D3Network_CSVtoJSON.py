@@ -17,7 +17,7 @@ for i, row in enumerate(reader):
 	if node not in keyArr:
 		keyArr.append(node)
 		num = len(keyArr)-1
-		nodeArr.append({"name": row['Name'], "title": row['Title']})
+		nodeArr.append({"name": node, "title": row['Title'], "bio": row['Bio']})
 
 	else:
 		num = keyArr.index(node)
@@ -27,8 +27,8 @@ for i, row in enumerate(reader):
 	if node2 not in keyArr:
 		keyArr.append(node2)
 		num2 = len(keyArr)-1
-		nodeArr.append({"name": row['Name or organization'], "title": row['Title2']})
-
+		nodeArr.append({"name": node2, "title": row['Title2'], "bio": row['Bio']})
+        
 	else:
 		num2 = keyArr.index(node2)
 
