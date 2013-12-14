@@ -26,14 +26,14 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 		});
 	}
 
-	if(w < 700){ //adjust coordinates for smaller screens
-		h = w*h/700+75; //stretch it a little vertically since we have more screen to work with that way
+	if(w < 960){ //adjust coordinates for smaller screens
+		h = w*h/960+75; //stretch it a little vertically since we have more screen to work with that way
 		nodes.forEach(function(node){
-			node.x = node.x*(w/700);
+			node.x = node.x*(w/960);
 			node.y = node.y*(h/500);
 		});
 	} else{ 
-		w = 700; //because of the charge/gravity
+		w = 960; //because of the charge/gravity
 	}
 
 	var force = d3.layout.force()
