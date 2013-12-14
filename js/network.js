@@ -231,7 +231,7 @@ d3.json("data/networkGwinnett.json", function(error, graph) {
 		if(!me.tip){
 			var data = me.datum();
 
-			var tip = data.name+" <span class='title'>"+graph.nodes[data.index].title+"</span><ul>";
+			var tip = data.name+" <span class='title'>"+graph.nodes[data.index].title+"</span><p>"+data.bio+"</p><ul>";
 			for(var i=0; i<graph.links.length; i++){
 				var link = graph.links[i]; //use org link arr to evaluate source/target nodes w/o nonsense link between
 
@@ -289,7 +289,7 @@ function printNewJSON(nodes, links, bilinks){
 	var newNodes = [], newLinks = [], newBilinks = [];
 	for (var i=0; i<nodes.length; i++){
 		var node = nodes[i];
-		newNodes.push({"name": node.name, "title": node.title, "x": node.x, "y": node.y, "fixed": node.fixed});
+		newNodes.push({"name": node.name, "title": node.title, "bio": node.bio, "x": node.x, "y": node.y, "fixed": node.fixed});
 	}
 	for(var i=0; i<links.length; i++){
 		var link = links[i];
