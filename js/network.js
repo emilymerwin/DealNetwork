@@ -181,7 +181,7 @@ d3.json("data/network.json", function(error, graph) {
 		if(!me.tip){
 			var data = me.datum();
 
-			var tip = data.name+" <span class='title'>"+graph.nodes[data.index].title+"</span><ul>";
+			var tip = data.name+" <span class='title'>"+graph.nodes[data.index].title+"</span><p>"+data.bio+"</p><ul>";
 			for(var i=0; i<graph.links.length; i++){
 				var link = graph.links[i]; //use org link arr to evaluate source/target nodes w/o nonsense link between
 
