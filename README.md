@@ -4,7 +4,7 @@
 
 ##How it works
 - Uses <a href="https://github.com/mbostock/d3/wiki/Force-Layout" target="_blank">D3 force layout</a>
-- D3Network_CSVtoJSON.py takes CSV from a spreadsheet formatted like <a href="https://docs.google.com/spreadsheet/ccc?key=0AhCTN8bJ6kLCdHBBNlVtU0lRTm1wVmlzX1lzV0tnV3c&usp=sharing">this</a> and spits out JSON formatted how the D3 force directed layout wants it
+- D3Network_CSVtoJSON.py takes CSV from a spreadsheet formatted like <a href="https://docs.google.com/spreadsheets/d/1u3v6rQTXINnn_C9X72pmyH-M_6dGXXGKKaDCNk9V3vY/edit?usp=sharing">this</a> and spits out JSON formatted how the D3 force directed layout wants it
 - Default view hides labels for nodes with fewer than three connections (a few appear as though they fit that criteria but actually have multiple links to the same people that you can't see)
 - "Edit mode" highlights fixed nodes in red and labels all nodes
 - "Edit mode" will display the curve anchors as little blue dots
